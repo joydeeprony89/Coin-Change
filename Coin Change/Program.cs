@@ -6,8 +6,8 @@ namespace Coin_Change
   {
     static void Main(string[] args)
     {
-      int[] coins = new int[] { 2  }; // 1, 3, 4, 5 // 1, 2, 5
-      int amount = 3; // 7 // 11
+      int[] coins = new int[] { 1, 3, 4, 5 }; // 1, 3, 4, 5 // 1, 2,  // 2
+      int amount = 7; // 11 // 3
       Program p = new Program();
       int result = p.CoinChange(coins, amount);
       Console.WriteLine(result);
@@ -16,16 +16,21 @@ namespace Coin_Change
     public int CoinChange(int[] coins, int amount)
     {
       if (amount <= 0) return 0;
+      // we need to create an array and for each index starting from 1 to the amount, we will be calculating the min no of coins req to get the amount
       long[] dp = new long[amount + 1];
+      // To get 0 amount we need 0 coins
       dp[0] = 0;
 
+      // Set all except 0 to infinity
       for (int a = 1; a < amount + 1; a++)
       {
         dp[a] = int.MaxValue;
       }
 
+      // now loop through for each coins
       for (int a = 1; a < amount + 1; a++)
       {
+        // will be comparing agaist the input coins to make the amount
         foreach (int c in coins)
         {
           int diff = a - c;
