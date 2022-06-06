@@ -15,34 +15,37 @@ namespace Coin_Change
 
     public int CoinChange(int[] coins, int amount)
     {
-      if (amount <= 0) return 0;
-      // we need to create an array and for each index starting from 1 to the amount, we will be calculating the min no of coins req to get the amount
-      long[] dp = new long[amount + 1];
-      // To get 0 amount we need 0 coins
-      dp[0] = 0;
+      int newLength = amount + 1;
+      long[] dp = new long[newLength];
 
-      // Set all except 0 to infinity
-      for (int a = 1; a < amount + 1; a++)
+      dp[0] = 0;
+      // we are assigning max values to each element to calculat the min no of coins
+      for (int i = 1; i < newLength; i++)
       {
-        dp[a] = int.MaxValue;
+        dp[i] = int.MaxValue;
       }
 
-      // now loop through for each coins
-      for (int a = 1; a < amount + 1; a++)
+      // for each , from 1 to amount, we will be calculating the no of coins required to make that amount
+      // outer loop for each amount
+      // inner loop for each coins given to us
+      // will take the amount from outer loop and for each amount will consider all the given coins.
+      // when we select a coin and after using that coin if we could not get the amount we will not consider that coin
+      // if the selected coin can make the amount, e.g - amount 1, and we have coins[1,2]
+      // aviously to make 1 we need 1 rupee coin only using 2 rs coin we can not get amount 1.
+      // now to make amount 1 using 1 rs coin, we need min coins ? 1 + coins need to make amount 0 = 1+dp[0], where 0 we are getting by substracting amount value from coin, diff = 1 - 1
+      for (int i = 1; i < newLength; i++)
       {
-        // will be comparing agaist the input coins to make the amount
-        foreach (int c in coins)
+        foreach (int coin in coins)
         {
-          int diff = a - c;
+          int diff = i - coin;
           if (diff >= 0)
           {
-            dp[a] = Math.Min(dp[a], 1 + dp[diff]);
+            dp[i] = Math.Min(dp[i], 1 + dp[diff]);
           }
         }
       }
 
-      if (dp[amount] == int.MaxValue) return -1;
-      else return (int)dp[amount];
+      return dp[amount] == int.MaxValue ? -1 : (int)dp[amount];
     }
   }
 }
